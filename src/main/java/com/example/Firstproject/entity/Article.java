@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-//실제 DataBase의 테이블과 1대1 매핑되는 클래스
+//실제 DataBase의 테이블과 1:1로 매핑되는 클래스
 @Entity // DB가 해당 객체를 인식 가능!
 public class Article {
 
