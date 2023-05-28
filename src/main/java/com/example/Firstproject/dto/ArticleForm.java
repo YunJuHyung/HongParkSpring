@@ -11,9 +11,10 @@ import lombok.ToString;
     public class ArticleForm {
         private String title;
         private String content;
+        private Long id; //edit.mustache의 정보를 받아오는 id
 
         public Article toEntity(){
-            return new Article(null, title, content);
+            return new Article(id, title, content);
 
         }
 
