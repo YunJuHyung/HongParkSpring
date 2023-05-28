@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
 @Controller
 @Slf4j //로깅을 위한 어노테이션
 public class ArticleController {
@@ -42,7 +47,7 @@ public class ArticleController {
         Article saved = articleRepository.save(article);
         log.info(saved.toString());
         //System.out.println(saved.toString()); ->logging으로 대체
-        return "";
+        return "redirect:/articles/" + saved.getId();
     }
 
     @GetMapping("/articles/{id}")       //클라이언트에게 받은 Url
@@ -50,7 +55,6 @@ public class ArticleController {
         //@PathVariable 어노테이션은 @GetMapping에서
         // 받아오는 Url 주소가 Path로 부터 입력이 된다는 것
         log.info("id = " + id);
-
 
         //1: id로 데이터를 가져옴!
         //찾는 id가 없으면 null을 반환하라는 뜻
@@ -61,4 +65,28 @@ public class ArticleController {
         //3: 보여줄 페이지를 설정!
         return "articles/show"; //show.mustache에 부트스트랩으로 받아온 자료를 넣어줌
     }
+
+    @GetMapping("/articles")
+    public String index(Model model) {
+        //1. 모든 Article을 가져온다!
+        List<Article>articleEntityList = articleRepository.findAll();
+
+        //2. 가져온 Article 묶음을 뷰로 전달!
+        model.addAttribute("articleList",articleEntityList);
+        //3. 뷰 페이지를 설정한다.
+        return "articles/index";    //articles/index.mustache 파일로 리턴
+
+    }
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id, Model model){
+        //수정할 데이터를 가져오기!
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+
+        // 모델에 데이터를 등록!
+        model.addAttribute("article", articleEntity);
+        //뷰페이지 작성
+        return "articles/edit";
+    }
 }
+
+
